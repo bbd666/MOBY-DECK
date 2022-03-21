@@ -25,7 +25,7 @@ uses
   OleCtrls, RSTIMERLib_TLB, UIIF,
   IdBaseComponent, IdComponent, IdUDPBase, IdUDPServer, IdChargenUDPServer,
   IdDiscardUDPServer, idglobal, IdAntiFreezeBase, IdAntiFreeze,idsockethandle,
-  IdUDPClient; //,VectorGeometry;
+  IdUDPClient, Buttons,unit2; //,VectorGeometry;
 
 
 
@@ -257,13 +257,23 @@ type TForm1 = class(TForm)
     SendBtn: TButton;
     CheckBox1: TCheckBox;
     Timer1: TTimer;
+    Group_tests: TGroupBox;
+    Button_test1: TButton;
+    Timer_test: TTimer;
+    Memo2: TMemo;
+    Label30: TLabel;
+    VICON_ON: TTimer;
+    VICON_OFF: TTimer;
+    video: TTimer;
+    BtnVicon: TBitBtn;
+    decompte: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime, newTime: Double);
     procedure GLSceneviewer1PostRender(Sender: TObject);
     procedure GLSceneviewer1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure GLSceneviewer1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure Button1Click(Sender: TObject);
+    procedure Btnn1Click(Sender: TObject);
     procedure edtm1Change(Sender: TObject);
     procedure edtm2Change(Sender: TObject);
     procedure edtm3Change(Sender: TObject);
@@ -350,6 +360,14 @@ type TForm1 = class(TForm)
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure SendBtnClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
+    procedure Button_test1Click(Sender: TObject);
+    procedure Button1fhClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure Timer_testTimer(Sender: TObject);
+    procedure VICON_ONTimer(Sender: TObject);
+    procedure VICON_OFFTimer(Sender: TObject);
+    procedure videoTimer(Sender: TObject);
+    procedure BtnViconClick(Sender: TObject);
   private                                             { Déclarations privées }
     Jpiston                    : array[0..1] of PNewtonjoint;
     bielle ,manivelle          : array[0..2] of Pnewtonbody;
@@ -474,6 +492,13 @@ var
   envoi_msg:boolean;
   msg:string;
   counter_msg,delai_msg:integer;
+  test_indicator:integer;
+  tick_test:integer;
+  max_tick_test:integer;
+  ampl_pretest,freq_pretest:single;
+  File_resu:textfile;
+  fade,fade_time,duration:single;
+
 
 const DR:integer=0; const AR:integer=1; const GA:integer=2; // ordre donné par le cablage ENC, DAC et ADC
 const VeAV:integer=0; const VeAR:integer=1;                 // 2 ventillateurs Avant et 2 Arriére
@@ -493,6 +518,33 @@ uses
   newtonutil;
 
 {$R *.dfm}
+
+
+function find_next_testNumber:integer;
+var
+  searchResult : TSearchRec;
+  index:integer;
+  sub:string;
+begin
+  index:=0;
+  // Try to find regular files matching Unit1.d* in the current dir
+  if FindFirst('resultats/Test_*.txt', faAnyFile, searchResult) = 0 then
+  begin
+    repeat
+      sub:=extractfilename(searchResult.Name);
+      sub:=ChangeFileExt(sub,'');
+      sub:=copy(sub,6,6);
+      if strtoint(sub)>index then  index:=strtoint(sub);
+    until FindNext(searchResult) <> 0;
+
+    // Must free up resources used by these successful finds
+    FindClose(searchResult);
+  end;
+  index:=index+1;
+  result:=index;
+  //ShowMessage('next index = '+IntToStr(index));
+end;
+
 //==============================================================================
 function maxi(l1,l2:single):single; begin maxi:=i2f(l1>l2,l1,l2); end;
 //==============================================================================
@@ -1750,70 +1802,109 @@ begin
   end;
 end;
 //==============================================================================================
+function rampe(t:single;slope_delay:single;duration:single):single;
+begin
+    if t<slope_delay then  result:=t/slope_delay
+    else
+    if t>duration-slope_delay then  result:=math.max(0,(duration-t)/slope_delay)
+    else result:=1.;
+end;
+//==============================================================================================
 procedure TForm1.GLCadencer1Progress(Sender:TObject;const deltaTime,newTime:Double);
 var
   i:integer;
   m1,m2,m3:array[0..9] of single;
   plateforme_pos:Tvector3f;
 begin
-  if Tangagetriangle.Checked then begin
-    tactive1:=tactive1+sgn1*vitRampeTang*Tbar15.Position/200;
-    if tactive1>Tbar14.Position/100* 25 then sgn1:=-1;
-    if tactive1<Tbar14.Position/100*-25 then sgn1:=1;
-    edtthe.text:=floattostrf(tactive1,fffixed,5,3)                    // avec l'angle en réel
-//  trackbar4.position:=round(tactive1) ;                             // uniquement entier
-  end;
-  angltangage:=angltangage+10*Tbar15.Position/100;
-  if angltangage>=360 then angltangage:=0;
-  if Tangagesinus.Checked then begin
-    tactive1:=sin(angltangage*pi/180)*Tbar14.Position/10;
-    edtthe.text:=floattostrf(tactive1,fffixed,5,3) ;
-    lbltangfreq.Caption:= floattostr(10*Tbar15.Position/360) ;
-    lbltangamp.Caption:= floattostr(Tbar14.Position/10) ;
-//  trackbar5.position:=round(tactive2) ;
-  end;
-  if Roulistriangle.Checked then begin
-    tactive2:=tactive2+sgn2*vitRampeRoul*Tbar13.Position/200;
-    if tactive2>Tbar12.Position/100* 25 then sgn2:=-1;
-    if tactive2<Tbar12.Position/100*-25 then sgn2:=1;
-    edtphi.text:=floattostrf(tactive2,fffixed,5,3);
-  end;
-  anglroulis:=anglroulis+10*Tbar13.Position/100;
-  if anglroulis>=360 then anglroulis:=0;
-  if Roulissinus.Checked then begin
-    tactive2:=sin(anglroulis*pi/180)*2*Tbar12.Position/10;
-    edtphi.text:=floattostrf(tactive2,fffixed,5,3) ;
-    lblroulfreq.Caption:= floattostr(10*Tbar13.Position/360) ;
-    lblroulamp.Caption:= floattostr(2*Tbar12.Position/10) ;
-//  trackbar5.position:=round(tactive2) ;
-  end;
-  anglPomp:=anglPomp+Tbar11.Position/200*20;
- if Form1.ChkRampPomp.Checked then begin      //
- if anglPomp>=360 then anglPomp:=0;
-  pomp:=biel+sin(anglPomp*pi/180)*Tbar10.Position/100*0.05;
-  form1.Caption:=floattostr(Pomp);
-{       +sin(anglPomp*pi/180*2)*Tbar10.Position/100*0.02+
-       +sin(anglPomp*pi/180*4)*Tbar10.Position/100*0.01;}             // somme de 3 sinus
-//caption:=floattostr(deltatime); NewtonWorldForEachBodyDo(FNewtonWorld, @numericaldamping) ;
-    edtdZ.text:=floattostrf(pomp,fffixed,5,3) ; //
-  end;                                          //
-  NewtonUpdate(FNewtonWorld,0.01);
-  mesureAngleCadreMobile();
-  Bressort.Scale.Z:=(Bpiston.Position.Z-hressort{0.325}-0.057)/0.225;
-//  form1.caption:=floattostr(Bpiston.Position.Z);
-  edtf1.Text:=floattostrf(F_moteur[0],fffixed,5,2);   // affichage des couples
-  edtf2.Text:=floattostrf(F_moteur[1],fffixed,5,2);
-  edtf3.Text:=floattostrf(F_moteur[2],fffixed,5,2);//  g:=0;
-  for i:=0 to 8 do begin m1[i]:=m1[i+1];end;m1[9]:=abs(F_moteur[0]);gauge1.Progress:=round(abs(F_moteur[0]));
-  for i:=0 to 8 do begin m2[i]:=m2[i+1];end;m2[9]:=abs(F_moteur[1]);gauge2.Progress:=round(abs(F_moteur[1]));
-  for i:=0 to 8 do begin m3[i]:=m3[i+1];end;m3[9]:=abs(F_moteur[2]);gauge3.Progress:=round(abs(F_moteur[2]));
-  plateforme_pos:=affinevectormake(0,0,0);
-  plateforme_gam:=AbsAccatRelPos(plateforme,plateforme_pos);
-//  _8136_A_Write_Ventilo(VeAV,strtofloat(Form1.LblKI.Caption));_8136_A_Write_Ventilo(VeAR,strtofloat(Form1.LblKI.Caption)); // pour slide manuel
 
-  packet.orientation[0]:=coef_phi*strtofloat(edtphi.text);
-  packet.orientation[1]:=coef_the*strtofloat(edtthe.text);
-  packet.orientation[2]:=coef_dz*(-biel+strtofloat(edtdZ.text));
+  if test_indicator<>0 then
+  //Liste de Tests préprogrammés
+  begin
+    Writeln(File_resu,edtphi.text+ #9 +edtthe.text+ #9 +floattostrf(-biel+strtofloat(edtdZ.text),fffixed,5,2)+ #9 +Lblvitesse.text);
+    case test_indicator of
+    1:
+      begin
+        anglroulis:=anglroulis+deltatime*freq_pretest*360;
+        fade:=fade+deltatime;
+        if anglroulis>=360 then anglroulis:=0;
+        duration:= max_tick_test*Timer_test.Interval/1000.;
+        tactive2:=sin(anglroulis*pi/180)*ampl_pretest*rampe(fade,fade_time,duration);
+        edtphi.text:=floattostrf(tactive2,fffixed,5,3);
+        //form1.caption:=floattostr(fade)+'  '+floattostr(duration)+'  '+floattostr(rampe(fade,fade_time,duration))+'  '+inttostr(tick_test)+'  '+inttostr(max_tick_test);
+      end
+      else
+      begin
+        fade:=0;
+        anglroulis:=0;
+        btnVicon.Enabled:=true;
+      end;
+    end;  
+  end
+
+  else
+
+  //Tests types paramétrés
+  begin
+  // Tangage Triangles
+      if Tangagetriangle.Checked then begin
+        tactive1:=tactive1+sgn1*vitRampeTang*Tbar15.Position/200;
+        if tactive1>Tbar14.Position/100* 25 then sgn1:=-1;
+        if tactive1<Tbar14.Position/100*-25 then sgn1:=1;
+        edtthe.text:=floattostrf(tactive1,fffixed,5,3)                    // avec l'angle en réel
+      end;
+  // Tangage Sinus
+      angltangage:=angltangage+10*Tbar15.Position/100;
+      if angltangage>=360 then angltangage:=0;
+      if Tangagesinus.Checked then begin
+        tactive1:=sin(angltangage*pi/180)*Tbar14.Position/10;
+        edtthe.text:=floattostrf(tactive1,fffixed,5,3) ;
+        lbltangfreq.Caption:= floattostr(10*Tbar15.Position/360) ;
+        lbltangamp.Caption:= floattostr(Tbar14.Position/10) ;
+      end;
+  // Roulis Triangles
+      if Roulistriangle.Checked then begin
+        tactive2:=tactive2+sgn2*vitRampeRoul*Tbar13.Position/200;
+        if tactive2>Tbar12.Position/100* 25 then sgn2:=-1;
+        if tactive2<Tbar12.Position/100*-25 then sgn2:=1;
+        edtphi.text:=floattostrf(tactive2,fffixed,5,3);
+      end;
+  // Roulis Sinus
+      anglroulis:=anglroulis+10*Tbar13.Position/100;
+      if anglroulis>=360 then anglroulis:=0;
+      if Roulissinus.Checked then begin
+        tactive2:=sin(anglroulis*pi/180)*2*Tbar12.Position/10;
+        edtphi.text:=floattostrf(tactive2,fffixed,5,3) ;
+        lblroulfreq.Caption:= floattostr(10*Tbar13.Position/360) ;
+        lblroulamp.Caption:= floattostr(2*Tbar12.Position/10) ;
+      end;
+    // Pompage Sinus
+      anglPomp:=anglPomp+Tbar11.Position/200*20;
+     if Form1.ChkRampPomp.Checked then begin      //
+     if anglPomp>=360 then anglPomp:=0;
+      pomp:=biel+sin(anglPomp*pi/180)*Tbar10.Position/100*0.05;
+      form1.Caption:=floattostr(Pomp);
+      edtdZ.text:=floattostrf(pomp,fffixed,5,3) ; //
+      end;                                          //
+  end;
+      NewtonUpdate(FNewtonWorld,0.01);
+      mesureAngleCadreMobile();
+      Bressort.Scale.Z:=(Bpiston.Position.Z-hressort{0.325}-0.057)/0.225;
+
+      edtf1.Text:=floattostrf(F_moteur[0],fffixed,5,2);   // affichage des couples
+      edtf2.Text:=floattostrf(F_moteur[1],fffixed,5,2);
+      edtf3.Text:=floattostrf(F_moteur[2],fffixed,5,2);
+
+      for i:=0 to 8 do begin m1[i]:=m1[i+1];end;m1[9]:=abs(F_moteur[0]);gauge1.Progress:=round(abs(F_moteur[0]));
+      for i:=0 to 8 do begin m2[i]:=m2[i+1];end;m2[9]:=abs(F_moteur[1]);gauge2.Progress:=round(abs(F_moteur[1]));
+      for i:=0 to 8 do begin m3[i]:=m3[i+1];end;m3[9]:=abs(F_moteur[2]);gauge3.Progress:=round(abs(F_moteur[2]));
+      plateforme_pos:=affinevectormake(0,0,0);
+      plateforme_gam:=AbsAccatRelPos(plateforme,plateforme_pos);
+
+
+
+  packet.orientation[0]:=coef_phi*strtofloat(edtphi.text);         //roulis
+  packet.orientation[1]:=coef_the*strtofloat(edtthe.text);         //tangage
+  packet.orientation[2]:=coef_dz*(-biel+strtofloat(edtdZ.text));  //pompage
   packet.warn:=checkbox1.Checked;
   msg:='';
   for i:=0 to memo1.lines.Count do msg:=msg+memo1.Lines[i];
@@ -2127,6 +2218,8 @@ begin
   coef_dz:=DATA_INI.READFLOAT('NETWORK','coef_pompage',1);
   coef_vit:=DATA_INI.READFLOAT('NETWORK','coef_vitesse',1);
   delai_msg:=DATA_INI.READINTEGER('NETWORK','delai_msg',5);
+  max_tick_test:=round(DATA_INI.READFLOAT('TEST','duration',5)/Timer_test.interval*1000);
+  fade_time:=DATA_INI.READFLOAT('TEST','fade_time',1);
   trackbarTangage.Position:=-round(coef_the*10);
   trackbarRoulis.Position:=-round(coef_phi*10);
   trackbarPompage.Position:=round(coef_dz*10);
@@ -2301,6 +2394,8 @@ begin
   envoi_msg:=false;
   msg:='';
   counter_msg:=delai_msg*10;
+  test_indicator:=0;
+  tick_test:=max_tick_test;
 
 end;
 //==============================================================================================
@@ -2434,7 +2529,10 @@ end;
 procedure TForm1.GLSceneviewer1MouseDown(Sender:TObject;Button:TMouseButton;Shift:TShiftState;X,Y:Integer);
 begin mx:=x; my:=y; end;  // memo x, y départ
 //==============================================================================================
-procedure TForm1.Button1Click(Sender: TObject); begin glcadencer1.Enabled:=not glcadencer1.Enabled; end;
+procedure TForm1.Btnn1Click(Sender: TObject);
+begin
+   find_next_testNumber;
+end;
 //==============================================================================================
 procedure TForm1.edtl0Change(Sender: TObject); begin try L0ressort:=strtofloat(edtl0.text); except end; end;
 //==============================================================================================
@@ -2665,6 +2763,108 @@ begin
   end;
   counter_msg:=counter_msg+1;
   counter_msg:=min(counter_msg,delai_msg*10);
+end;
+
+procedure TForm1.Button_test1Click(Sender: TObject);
+var
+  i:integer;
+begin
+      Button_test1.Enabled:=false;
+      test_indicator:=1;
+      tick_test:=0;
+      ampl_pretest:=5.0;
+      freq_pretest:=0.5;
+      form2.Memo1.Lines.Add('Essai sinus en roulis');
+      form2.Memo1.Lines.Add('Amplitude : '+floattostr(ampl_pretest));
+      form2.Memo1.Lines.Add('Fréquence : '+floattostr(freq_pretest));
+      for i:=1 to memo2.Lines.Count do
+      form2.Memo1.Lines.Add(memo2.Lines[i-1]);
+      form2.Memo1.Lines.Add(FormatDateTime('ddddd', Date));
+      form2.Memo1.Lines.Add(FormatDateTime('tt', time));
+      Timer_test.Enabled:=true;
+end;
+
+procedure TForm1.Button1fhClick(Sender: TObject);
+begin
+  form2.show;
+end;
+
+procedure TForm1.FormActivate(Sender: TObject);
+begin
+  ShowWindow(form2.Handle, SW_SHOWNOACTIVATE); form2.Visible:=true;  //evite la perte de focus de la form1 qd on utilise  form2.show;
+  form2.Left:= 1920;
+  form2.BorderStyle:= bsnone;
+  form2.Height:=1900;
+  form2.Top:=10;
+  form1.SetFocus;
+end;
+
+function IsOpen(const txt:TextFile):Boolean;
+const
+  fmTextOpenRead = 55217;
+  fmTextOpenWrite = 55218;
+begin
+  Result := (TTextRec(txt).Mode = fmTextOpenRead) or (TTextRec(txt).Mode = fmTextOpenWrite)
+end;
+
+procedure TForm1.Timer_testTimer(Sender: TObject);
+begin
+   tick_test:=tick_test+1;
+   decompte.Caption:=inttostr(round((max_tick_test-tick_test)*Timer_test.interval/1000));
+   tick_test:=min(tick_test,max_tick_test);
+   //form1.caption:=floattostrf(fade,fffixed,5,2)+'  '+inttostr(tick_test)+'  '+floattostrf(fade*10-tick_test,fffixed,5,2);
+   if tick_test=max_tick_test-1 then
+   begin
+          _8136_D_Output(CARD0,1,MARCHE);
+          VICON_OFF.Enabled:=true;
+          _8136_D_Output(CARD0,3,MARCHE);
+          BtnVicon.Enabled:=true;
+   end;
+   if tick_test=max_tick_test then
+   begin
+    test_indicator:=0;
+    if isOpen(File_resu)  then CloseFile(File_resu);
+   end;
+end;
+
+procedure TForm1.VICON_ONTimer(Sender: TObject);
+begin
+          _8136_D_Output(CARD0,6,ARRET);
+          VICON_ON.Enabled:=false;
+end;
+
+procedure TForm1.VICON_OFFTimer(Sender: TObject);
+begin
+          _8136_D_Output(CARD0,1,ARRET);
+          VICON_OFF.Enabled:=false;
+end;
+
+procedure TForm1.videoTimer(Sender: TObject);
+begin
+          _8136_D_Output(CARD0,3,ARRET);
+          video.Enabled:=false;
+end;
+
+procedure TForm1.BtnViconClick(Sender: TObject);
+var
+  i,buttonSelected : integer;
+begin
+    i:=find_next_testNumber;
+    buttonSelected := messagedlg('Test_'+inttostr(i)+'.txt ?',mtError, mbOKCancel, 0);
+    if buttonSelected = mrOK then
+    begin
+      form2.Memo1.Clear;
+      form2.Memo1.Lines.Add('Test_'+inttostr(i));
+      AssignFile(File_resu,'resultats/Test_'+inttostr(i)+'.txt');
+      ReWrite(File_resu);
+      _8136_D_Output(CARD0,6,MARCHE);
+      vicon_on.Enabled:=true;
+      _8136_D_Output(CARD0,3,MARCHE);
+      video.Enabled:=true;
+      BtnVicon.Enabled:=false;
+      Button_test1.Enabled:=true;
+      Timer_test.Enabled:=false;
+    end;
 end;
 
 end.

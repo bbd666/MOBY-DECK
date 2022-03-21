@@ -1,10 +1,10 @@
 object Form1: TForm1
-  Left = -8
-  Top = 53
-  Width = 1612
-  Height = 1212
-  AutoSize = True
-  Caption = 'Plateforme mobile OSCAR optimis'#233'e en 1600x1200'
+  Left = -45
+  Top = 167
+  Width = 1846
+  Height = 1159
+  Anchors = []
+  Caption = 'pilotage du banc d'#39'essai MOBY-DECK'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,6 +13,7 @@ object Form1: TForm1
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  OnActivate = FormActivate
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -22,21 +23,19 @@ object Form1: TForm1
   object GLSceneviewer1: TGLSceneViewer
     Left = 0
     Top = 0
-    Width = 1112
-    Height = 1160
+    Width = 1345
+    Height = 1105
     Camera = GLCamera1
     PostRender = GLSceneviewer1PostRender
-    FieldOfView = 140.431442260742
-    Align = alClient
+    FieldOfView = 140.200408935547
     OnMouseDown = GLSceneviewer1MouseDown
     OnMouseMove = GLSceneviewer1MouseMove
   end
   object Panel1: TPanel
-    Left = 1112
+    Left = 1344
     Top = 0
     Width = 492
-    Height = 1160
-    Align = alRight
+    Height = 1105
     Color = clSilver
     TabOrder = 1
     object lblFile: TLabel
@@ -97,15 +96,15 @@ object Form1: TForm1
       Caption = 'ActInvCycD'#233'p'
     end
     object Label12: TLabel
-      Left = 8
-      Top = 1104
+      Left = 240
+      Top = 1056
       Width = 23
       Height = 13
       Caption = 'UDP'
     end
     object LblTimerUdp: TLabel
-      Left = 152
-      Top = 1104
+      Left = 384
+      Top = 1056
       Width = 97
       Height = 13
       Alignment = taRightJustify
@@ -113,8 +112,8 @@ object Form1: TForm1
       Caption = '15.5 '#181's'
     end
     object LblTraiteUdp: TLabel
-      Left = 152
-      Top = 1120
+      Left = 384
+      Top = 1072
       Width = 97
       Height = 13
       Alignment = taRightJustify
@@ -122,8 +121,8 @@ object Form1: TForm1
       Caption = '15.5 '#181's'
     end
     object LblFiltreUdp: TLabel
-      Left = 152
-      Top = 1136
+      Left = 384
+      Top = 1088
       Width = 97
       Height = 13
       Alignment = taRightJustify
@@ -131,8 +130,8 @@ object Form1: TForm1
       Caption = '15.5 '#181's'
     end
     object LblNbMax: TLabel
-      Left = 96
-      Top = 1104
+      Left = 328
+      Top = 1056
       Width = 57
       Height = 17
       Alignment = taRightJustify
@@ -140,8 +139,8 @@ object Form1: TForm1
       Caption = '123456789'
     end
     object LblNbMin: TLabel
-      Left = 96
-      Top = 1136
+      Left = 328
+      Top = 1088
       Width = 57
       Height = 17
       Alignment = taRightJustify
@@ -149,8 +148,8 @@ object Form1: TForm1
       Caption = '123456789'
     end
     object LblNbMid: TLabel
-      Left = 96
-      Top = 1120
+      Left = 328
+      Top = 1072
       Width = 57
       Height = 17
       Alignment = taRightJustify
@@ -158,8 +157,8 @@ object Form1: TForm1
       Caption = '123456789'
     end
     object LblChangeUdp: TLabel
-      Left = 32
-      Top = 1136
+      Left = 264
+      Top = 1088
       Width = 65
       Height = 13
       Alignment = taRightJustify
@@ -167,15 +166,15 @@ object Form1: TForm1
       Caption = '15.5 '#181's'
     end
     object Label24: TLabel
-      Left = 8
-      Top = 1120
+      Left = 240
+      Top = 1072
       Width = 21
       Height = 13
       Caption = 'FLM'
     end
     object Label25: TLabel
-      Left = 8
-      Top = 1136
+      Left = 240
+      Top = 1088
       Width = 24
       Height = 13
       Caption = 'Ceint'
@@ -2016,24 +2015,24 @@ object Form1: TForm1
       TabOrder = 35
     end
     object ChkBoxUdp: TCheckBox
-      Left = 40
-      Top = 1104
+      Left = 272
+      Top = 1056
       Width = 17
       Height = 17
       TabOrder = 36
       OnClick = ChkBoxUdpClick
     end
     object ChkFileLoi: TCheckBox
-      Left = 40
-      Top = 1120
+      Left = 272
+      Top = 1072
       Width = 17
       Height = 17
       TabOrder = 37
       OnClick = ChkFileLoiClick
     end
     object ChkBoxCeint: TCheckBox
-      Left = 40
-      Top = 1136
+      Left = 272
+      Top = 1088
       Width = 17
       Height = 17
       Caption = 'ChkBoxCeint'
@@ -2286,19 +2285,106 @@ object Form1: TForm1
         TabOrder = 2
       end
     end
+    object Group_tests: TGroupBox
+      Left = 251
+      Top = 374
+      Width = 233
+      Height = 419
+      Caption = 'Tests pr'#233'programm'#233's'
+      Color = clBtnFace
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 42
+      object Label30: TLabel
+        Left = 8
+        Top = 320
+        Width = 125
+        Height = 13
+        Caption = 'Commentaires additionnels'
+      end
+      object decompte: TLabel
+        Left = 149
+        Top = 288
+        Width = 72
+        Height = 24
+        Alignment = taRightJustify
+        BiDiMode = bdLeftToRight
+        Caption = '0123'
+        Color = clBlack
+        Font.Charset = OEM_CHARSET
+        Font.Color = clYellow
+        Font.Height = -27
+        Font.Name = 'Terminal'
+        Font.Style = [fsBold]
+        ParentBiDiMode = False
+        ParentColor = False
+        ParentFont = False
+      end
+      object Button_test1: TButton
+        Left = 8
+        Top = 64
+        Width = 217
+        Height = 17
+        Caption = 'Sinus Roulis ; Amp : 5 ; Fr'#233'q :0.5'
+        Enabled = False
+        TabOrder = 0
+        OnClick = Button_test1Click
+      end
+      object Memo2: TMemo
+        Left = 2
+        Top = 336
+        Width = 229
+        Height = 81
+        Align = alBottom
+        TabOrder = 1
+      end
+      object BtnVicon: TBitBtn
+        Left = 64
+        Top = 24
+        Width = 121
+        Height = 25
+        Caption = '&Armement VICON'
+        TabOrder = 2
+        OnClick = BtnViconClick
+        Kind = bkIgnore
+      end
+      object Button1: TButton
+        Left = 112
+        Top = 144
+        Width = 75
+        Height = 25
+        Caption = 'OFF'
+        TabOrder = 3
+        OnClick = Button1Click
+      end
+      object Button2: TButton
+        Left = 128
+        Top = 192
+        Width = 75
+        Height = 25
+        Caption = 'ON'
+        TabOrder = 4
+        OnClick = Button2Click
+      end
+    end
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 1160
-    Width = 1604
+    Top = 1107
+    Width = 1838
     Height = 18
     Panels = <
       item
-        Text = 'Pierre LEMERLE 13/01/2009'
+        Text = 'Pierre LEMERLE 18/03/2022'
         Width = 150
       end
       item
-        Text = 'blackbird-dream@wanadoo.fr'
+        Text = 'pierre.lemerle@inrs.fr'
         Width = 50
       end>
     SimplePanel = False
@@ -2306,7 +2392,7 @@ object Form1: TForm1
   end
   object RSTimerAsserv1: TRSTimer
     Left = 232
-    Top = 40
+    Top = 120
     Width = 32
     Height = 32
     OnTimer = RSTimerAsserv1Timer
@@ -2314,7 +2400,7 @@ object Form1: TForm1
   end
   object RSTimerAsserv2: TRSTimer
     Left = 232
-    Top = 72
+    Top = 152
     Width = 32
     Height = 32
     OnTimer = RSTimerAsserv2Timer
@@ -2322,7 +2408,7 @@ object Form1: TForm1
   end
   object RSTimerAsserv3: TRSTimer
     Left = 232
-    Top = 104
+    Top = 184
     Width = 32
     Height = 32
     OnTimer = RSTimerAsserv3Timer
@@ -2330,7 +2416,7 @@ object Form1: TForm1
   end
   object RSTimerParc: TRSTimer
     Left = 48
-    Top = 208
+    Top = 288
     Width = 32
     Height = 32
     OnTimer = RSTimerParcTimer
@@ -2338,7 +2424,7 @@ object Form1: TForm1
   end
   object RSTimerUdp: TRSTimer
     Left = 80
-    Top = 208
+    Top = 288
     Width = 32
     Height = 32
     OnTimer = RSTimerUdpTimer
@@ -2346,7 +2432,7 @@ object Form1: TForm1
   end
   object RSTimerEntreeLogique: TRSTimer
     Left = 984
-    Top = 104
+    Top = 184
     Width = 32
     Height = 32
     OnTimer = RSTimerEntreeLogiqueTimer
@@ -2679,5 +2765,32 @@ object Form1: TForm1
     OnTimer = Timer1Timer
     Left = 968
     Top = 216
+  end
+  object Timer_test: TTimer
+    Interval = 100
+    OnTimer = Timer_testTimer
+    Left = 1096
+    Top = 848
+  end
+  object VICON_ON: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = VICON_ONTimer
+    Left = 1144
+    Top = 848
+  end
+  object VICON_OFF: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = VICON_OFFTimer
+    Left = 1192
+    Top = 848
+  end
+  object video: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = videoTimer
+    Left = 1248
+    Top = 848
   end
 end
