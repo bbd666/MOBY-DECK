@@ -1,0 +1,31 @@
+CASTING.TXT
+
+Any type of data structure can be transmitted using SioPuts. For example,
+the following function (see EASY_PGM.PAS) will transmit the 6 byte record
+'Data' when the user types a '$'.
+
+___________________________________________________________
+procedure TEasy.KeyPress(Sender: TObject; var Key: Char);
+type
+  DataRecType = record
+    Count  : WORD;
+    Buffer : array[0..4] of Char;
+  end;
+var
+  Code : Integer;
+  Data : DataRecType;
+  Ptr  : PChar;
+begin
+  if Key = '$' then
+    begin
+      Data.Count := 4;
+      Data.Buffer[0] := 'A';
+      Data.Buffer[1] := 'B';
+      Data.Buffer[2] := 'C';
+      Data.Buffer[3] := 'D';
+      Ptr := Addr(Data);
+      Code := SioPuts(Port,Ptr,8)
+    end
+  else Code := SioPutc(Port,Key)
+end;
+___________________________________________________________

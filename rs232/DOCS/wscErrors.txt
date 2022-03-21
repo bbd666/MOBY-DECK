@@ -1,0 +1,32 @@
+***
+*** WSC Errors Codes
+***
+
+  -1 : Invalid COM port
+  -2 : COM port already open
+  -3 : Port not opened
+  -4 : Cannot allocate memory
+  -5 : Error in default parameters
+ -10 : COM port hardware not present
+ -11 : Unsupported byte size
+ -12 : Unsupported byte size
+-100 : TX buffer is busy (not ready to accept more : 
+-100 : No data.
+-101 : Parameter is out of range.
+-102 : Aborted.
+-103 : Windows error code returned (call SioWinError to get error text) 
+-104 : Evaluation version expired, or SioKeyCode not called.
+-105 : Cannot allocate memory for buffers
+-106 : Cannot start thread
+-107 : Timed out.
+-108 : Bad key code (see SioKeyCode).
+
+Note: Error -103 mean that there is a Windows error message. To get the text
+      of this error, call the SioWinError function. The two most common Windows
+      errors retuned by SioWinError are:
+      
+      "Access denied" - the port is already open. 
+      "The system cannot find the port specified." - the requested port does not exist.
+ 
+[END]
+

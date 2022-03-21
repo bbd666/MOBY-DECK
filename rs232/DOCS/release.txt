@@ -1,0 +1,71 @@
+*** WSC Version 4.4 Release Notes ***
+
+Added SioSetTimeouts() function (sets TX and RX time-outs).
+
+*** WSC Version 4.3 Release Notes ***
+
+SioShortToByte & SioByteToShort added for converting between 16-bit Unicode & 8-bit ASCII.
+
+*** WSC Version 4.2 Release Notes ***
+
+SioEventChar and SioEventWait functions added.
+
+*** WSC Version 4.1 Release Notes ***
+
+SioEvent uses overlapped I/O in Windows 98 and above (Win95 does not support overlapped I/O).
+
+*** WSC Version 4.0 Release Notes ***
+
+The files WSC32.DLL, MIO32.DLL, XYM32.DLL, WSC16.DLL, MIO16.DLL, and XYM16.DLL 
+are all copied to your Windows directory (C:\WINDOWS or C:\WINNT for Win 2000/NT) 
+when SETUP.EXE is run. 
+
+The function SioKeyCode was added to version 4.0 so that the keycode (assigned to 
+each registrant) can be passed to WSC32.DLL (or WSC16.DLL for 16-bit applications).
+
+If converting from an earlier version of WSC, do the following:
+
+(1) Add keycode to your "uses" clause in your source program (*.PAS). For example,
+
+     uses
+       wsc32, keycode, ...
+
+You can leave 'keycode' out above if you put your numerical keycode value (found in 
+keycode.pas) directly into the call to SioKeyCode. 
+
+(2) Add the following code which must be called (once) before any other WSC code:
+
+    {pass the key code}
+    if SioKeyCode(WSC_KEY_CODE) < 0 then
+      begin 
+        ...key-code error...
+        exit      
+      end;   
+
+    Alternatively, you can paste the value of your actual keycode (the 9 or 10 digit 
+    number found in keycode.pas) into SioKeyCode. The keycode for the  evaluation 
+    version is always 0.
+    
+    Refer to VER_PRJ.* and VER_PGM.* for an example.
+
+
+*** WSC Version 3.2 Release Notes ***
+
+The files WSC32.DLL, MIO32.DLL, XYM32.DLL, WSC16.DLL, MIO16.DLL, and XYM16.DLL are all 
+copied to your Windows directory when SETUP.EXE is run. Make a copy of these DLL's in 
+case they are over overwritten.
+
+The XMODEM/YMODEM files were renamed from XYDRV* to XYM*. The ASCII Protocol files were 
+renamed from ASDRV* to ASD*.
+
+WSC4D is configured for 32-bit Delphi. To compile using 16-bit Delphi 1, run READY16.BAT 
+before compiling, which will copy:
+
+  COPY WSC32.PAS WSC.PAS
+  COPY XYM32.PAS XYM.PAS
+  COPY ASD32.PAS ASD.PAS
+  COPY MIO32.PAS MIO.PAS
+
+[END]
+
+
