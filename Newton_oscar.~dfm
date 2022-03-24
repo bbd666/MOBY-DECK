@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = -45
-  Top = 167
+  Left = 38
+  Top = 109
   Width = 1846
   Height = 1159
   Anchors = []
@@ -2354,20 +2354,20 @@ object Form1: TForm1
         Kind = bkIgnore
       end
       object Button1: TButton
-        Left = 112
-        Top = 144
+        Left = 88
+        Top = 152
         Width = 75
         Height = 25
-        Caption = 'OFF'
+        Caption = 'REC'
         TabOrder = 3
         OnClick = Button1Click
       end
       object Button2: TButton
-        Left = 128
-        Top = 192
+        Left = 88
+        Top = 184
         Width = 75
         Height = 25
-        Caption = 'ON'
+        Caption = 'STOP'
         TabOrder = 4
         OnClick = Button2Click
       end

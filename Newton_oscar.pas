@@ -267,6 +267,8 @@ type TForm1 = class(TForm)
     video: TTimer;
     BtnVicon: TBitBtn;
     decompte: TLabel;
+    Button1: TButton;
+    Button2: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime, newTime: Double);
@@ -368,6 +370,8 @@ type TForm1 = class(TForm)
     procedure VICON_OFFTimer(Sender: TObject);
     procedure videoTimer(Sender: TObject);
     procedure BtnViconClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private                                             { Déclarations privées }
     Jpiston                    : array[0..1] of PNewtonjoint;
     bielle ,manivelle          : array[0..2] of Pnewtonbody;
@@ -498,6 +502,8 @@ var
   ampl_pretest,freq_pretest:single;
   File_resu:textfile;
   fade,fade_time,duration:single;
+  REC,STOP:array[1..8] of boolean;
+  t_curr,t0,delay_bit:int64;
 
 
 const DR:integer=0; const AR:integer=1; const GA:integer=2; // ordre donné par le cablage ENC, DAC et ADC
@@ -506,6 +512,8 @@ const DTIM:integer=2970;                                    // 2.97 ms
 const REDUCT:integer=32;                                    // rapport de réduction du réducteur moteur
 const VMOT:integer=30;                                      // vitesse moteur en tr/s
 const dim_buffer=3;
+const dLink_1=6;
+const dLink_6=1;
 
 var Buffer: array[1..dim_buffer] of integer;
 
@@ -522,7 +530,7 @@ uses
 
 function find_next_testNumber:integer;
 var
-  searchResult : TSearchRec;
+  searchResult : TSearchREC;
   index:integer;
   sub:string;
 begin
@@ -2396,6 +2404,10 @@ begin
   counter_msg:=delai_msg*10;
   test_indicator:=0;
   tick_test:=max_tick_test;
+  REC[1]:=false;REC[2]:=false;REC[3]:=false;REC[4]:=true;REC[5]:=true;REC[6]:=false;REC[7]:=false;REC[8]:=false;
+  STOP[1]:=false;STOP[2]:=false;STOP[3]:=true;STOP[4]:=true;STOP[5]:=false;STOP[6]:=false;STOP[7]:=true;STOP[8]:=true;
+  delay_bit:=round(3.13e3*104);
+  queryPerformanceCounter(t0);
 
 end;
 //==============================================================================================
@@ -2815,10 +2827,10 @@ begin
    //form1.caption:=floattostrf(fade,fffixed,5,2)+'  '+inttostr(tick_test)+'  '+floattostrf(fade*10-tick_test,fffixed,5,2);
    if tick_test=max_tick_test-1 then
    begin
-          _8136_D_Output(CARD0,1,MARCHE);
+          _8136_D_Output(CARD0,Dlink_1,MARCHE);       //VICON OFF
           VICON_OFF.Enabled:=true;
-          _8136_D_Output(CARD0,3,MARCHE);
-          BtnVicon.Enabled:=true;
+          {_8136_D_Output(CARD0,3,MARCHE);       // Video
+          BtnVicon.Enabled:=true;   }
    end;
    if tick_test=max_tick_test then
    begin
@@ -2829,20 +2841,20 @@ end;
 
 procedure TForm1.VICON_ONTimer(Sender: TObject);
 begin
-          _8136_D_Output(CARD0,6,ARRET);
+          _8136_D_Output(CARD0,Dlink_6,ARRET);
           VICON_ON.Enabled:=false;
 end;
 
 procedure TForm1.VICON_OFFTimer(Sender: TObject);
 begin
-          _8136_D_Output(CARD0,1,ARRET);
+          _8136_D_Output(CARD0,Dlink_1,ARRET);
           VICON_OFF.Enabled:=false;
 end;
 
 procedure TForm1.videoTimer(Sender: TObject);
 begin
-          _8136_D_Output(CARD0,3,ARRET);
-          video.Enabled:=false;
+          {_8136_D_Output(CARD0,3,ARRET);
+          video.Enabled:=false;}
 end;
 
 procedure TForm1.BtnViconClick(Sender: TObject);
@@ -2857,15 +2869,46 @@ begin
       form2.Memo1.Lines.Add('Test_'+inttostr(i));
       AssignFile(File_resu,'resultats/Test_'+inttostr(i)+'.txt');
       ReWrite(File_resu);
-      _8136_D_Output(CARD0,6,MARCHE);
+      _8136_D_Output(CARD0,Dlink_6,MARCHE); //VICON   ON
       vicon_on.Enabled:=true;
-      _8136_D_Output(CARD0,3,MARCHE);
-      video.Enabled:=true;
+      {_8136_D_Output(CARD0,3,MARCHE);   //video
+      video.Enabled:=true; }
       BtnVicon.Enabled:=false;
       Button_test1.Enabled:=true;
       Timer_test.Enabled:=false;
     end;
 end;
+
+procedure sendLANC(ordre:array of boolean);
+var
+  i:integer;
+begin
+    queryPerformanceCounter(t_curr);
+    _8136_D_Output(CARD0,3,MARCHE);                                                                 //etat de repos LANC Control-L
+    while t_curr<t0+15650000  do begin end;                                                         // delai de 5 ms  (3.13 GHz clock)
+    t0:=t_curr;
+    _8136_D_Output(CARD0,3,ARRET);                                                                  // etat haut : start bit
+    while t_curr<t0+delay_bit  do begin end;                                                        // delai de 104 mu_s
+    t0:=t_curr;
+    for i:=1 to 8 do
+    begin
+       if ordre[9-i]=TRUE then  _8136_D_Output(CARD0,3,ARRET) else _8136_D_Output(CARD0,3,MARCHE);  //ordre inversé de la séquence de bits
+       while t_curr<t0+delay_bit  do begin end;                                                     // delai de 104 mu_s
+       t0:=t_curr;
+    end;
+    _8136_D_Output(CARD0,3,MARCHE);                                                                 //retour à l'etat de repos LANC Control-L
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  sendLANC(STOP);
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  sendLANC(REC);
+end;
+
 
 end.
 //==============================================================================================
