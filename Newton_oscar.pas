@@ -2406,7 +2406,8 @@ begin
   tick_test:=max_tick_test;
   REC[1]:=false;REC[2]:=false;REC[3]:=false;REC[4]:=true;REC[5]:=true;REC[6]:=false;REC[7]:=false;REC[8]:=false;
   STOP[1]:=false;STOP[2]:=false;STOP[3]:=true;STOP[4]:=true;STOP[5]:=false;STOP[6]:=false;STOP[7]:=true;STOP[8]:=true;
-  delay_bit:=round(3.13e3*104);
+  queryPerformanceFrequency(queryFreq);
+  delay_bit:=round(queryFreq/9600);     //9600 bauds
   queryPerformanceCounter(t0);
 
 end;
@@ -2883,17 +2884,15 @@ procedure sendLANC(ordre:array of boolean);
 var
   i:integer;
 begin
+// algorithme non testé. Ne fonctionne pas a priori : manque la detection du signal LANC de réception des données
     queryPerformanceCounter(t_curr);
-    _8136_D_Output(CARD0,3,MARCHE);                                                                 //etat de repos LANC Control-L
-    while t_curr<t0+15650000  do begin end;                                                         // delai de 5 ms  (3.13 GHz clock)
-    t0:=t_curr;
     _8136_D_Output(CARD0,3,ARRET);                                                                  // etat haut : start bit
-    while t_curr<t0+delay_bit  do begin end;                                                        // delai de 104 mu_s
+    while t_curr<t0+delay_bit  do begin queryPerformanceCounter(t_curr); end;                       // delai de 104 mu_s
     t0:=t_curr;
     for i:=1 to 8 do
     begin
        if ordre[9-i]=TRUE then  _8136_D_Output(CARD0,3,ARRET) else _8136_D_Output(CARD0,3,MARCHE);  //ordre inversé de la séquence de bits
-       while t_curr<t0+delay_bit  do begin end;                                                     // delai de 104 mu_s
+       while t_curr<t0+delay_bit  do begin queryPerformanceCounter(t_curr); end;                    // delai de 104 mu_s
        t0:=t_curr;
     end;
     _8136_D_Output(CARD0,3,MARCHE);                                                                 //retour à l'etat de repos LANC Control-L
@@ -2901,12 +2900,19 @@ end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  sendLANC(STOP);
+  _8136_D_Output(CARD0,3,MARCHE); // sortie 24V
+  //_8136_D_Output(CARD0,0,MARCHE);    // sortie 5V
+  sleep(20);
+  _8136_D_Output(CARD0,3,ARRET); // sortie 24V
+  //_8136_D_Output(CARD0,0,ARRET); // sortie 5V
+  //sendLANC(STOP);
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-  sendLANC(REC);
+  //_8136_D_Output(CARD0,3,MARCHE);  // sortie 24V
+  _8136_D_Output(CARD0,0,MARCHE);  // sortie 5V
+  //sendLANC(REC);
 end;
 
 
