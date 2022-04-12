@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 38
-  Top = 109
+  Left = 83
+  Top = 15
   Width = 1846
   Height = 1159
   Anchors = []
@@ -1842,7 +1842,7 @@ object Form1: TForm1
       Text = '0.7'
     end
     object BtRazMinMax: TButton
-      Left = 192
+      Left = 188
       Top = 976
       Width = 65
       Height = 17
@@ -2289,7 +2289,7 @@ object Form1: TForm1
       Left = 251
       Top = 374
       Width = 233
-      Height = 419
+      Height = 675
       Caption = 'Tests pr'#233'programm'#233's'
       Color = clBtnFace
       Font.Charset = DEFAULT_CHARSET
@@ -2302,14 +2302,14 @@ object Form1: TForm1
       TabOrder = 42
       object Label30: TLabel
         Left = 8
-        Top = 320
+        Top = 576
         Width = 125
         Height = 13
         Caption = 'Commentaires additionnels'
       end
       object decompte: TLabel
         Left = 149
-        Top = 288
+        Top = 560
         Width = 72
         Height = 24
         Alignment = taRightJustify
@@ -2325,23 +2325,13 @@ object Form1: TForm1
         ParentColor = False
         ParentFont = False
       end
-      object Button_test1: TButton
-        Left = 8
-        Top = 64
-        Width = 217
-        Height = 17
-        Caption = 'Sinus Roulis ; Amp : 5 ; Fr'#233'q :0.5'
-        Enabled = False
-        TabOrder = 0
-        OnClick = Button_test1Click
-      end
       object Memo2: TMemo
         Left = 2
-        Top = 336
+        Top = 592
         Width = 229
         Height = 81
         Align = alBottom
-        TabOrder = 1
+        TabOrder = 0
       end
       object BtnVicon: TBitBtn
         Left = 64
@@ -2349,27 +2339,486 @@ object Form1: TForm1
         Width = 121
         Height = 25
         Caption = '&Armement VICON'
-        TabOrder = 2
+        TabOrder = 1
         OnClick = BtnViconClick
         Kind = bkIgnore
       end
-      object Button1: TButton
-        Left = 88
-        Top = 152
-        Width = 75
-        Height = 25
-        Caption = 'REC'
-        TabOrder = 3
-        OnClick = Button1Click
+      object GB_Rouils: TGroupBox
+        Left = 8
+        Top = 56
+        Width = 217
+        Height = 105
+        Caption = 'Essais Roulis'
+        Color = clSkyBlue
+        ParentColor = False
+        TabOrder = 2
+        object Label31: TLabel
+          Left = 16
+          Top = 18
+          Width = 46
+          Height = 13
+          Caption = 'Amplitude'
+        end
+        object Label32: TLabel
+          Left = 80
+          Top = 18
+          Width = 51
+          Height = 13
+          Caption = 'Fr'#233'quence'
+        end
+        object Label33: TLabel
+          Left = 32
+          Top = 59
+          Width = 91
+          Height = 13
+          Caption = 'Bande fr'#233'quentielle'
+        end
+        object Button_test1: TButton
+          Left = 152
+          Top = 32
+          Width = 57
+          Height = 17
+          Caption = 'Sinus'
+          Enabled = False
+          TabOrder = 0
+          OnClick = Button_test1Click
+        end
+        object Button_test2: TButton
+          Left = 152
+          Top = 75
+          Width = 57
+          Height = 17
+          Caption = 'Al'#233'atoire'
+          Enabled = False
+          TabOrder = 1
+          OnClick = Button_test2Click
+        end
+        object CBRAmp: TComboBox
+          Left = 16
+          Top = 32
+          Width = 49
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 2
+          Text = '0'
+          Items.Strings = (
+            '0'
+            '4'
+            '8')
+        end
+        object CBRFreq: TComboBox
+          Left = 87
+          Top = 33
+          Width = 50
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 3
+          Text = '0.25'
+          Items.Strings = (
+            '0.25'
+            '0.5'
+            '0.7'
+            '1')
+        end
+        object CBRalea: TComboBox
+          Left = 48
+          Top = 73
+          Width = 64
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 4
+          Text = '0.25 - 1'
+          Items.Strings = (
+            '0.25 - 1'
+            '0.25 - 5'
+            '0.25 - 10')
+        end
       end
-      object Button2: TButton
-        Left = 88
-        Top = 184
-        Width = 75
-        Height = 25
-        Caption = 'STOP'
+      object GBTangage: TGroupBox
+        Left = 8
+        Top = 168
+        Width = 217
+        Height = 105
+        Caption = 'Essais Tangage'
+        Color = clMoneyGreen
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 3
+        object Label34: TLabel
+          Left = 16
+          Top = 18
+          Width = 46
+          Height = 13
+          Caption = 'Amplitude'
+        end
+        object Label35: TLabel
+          Left = 80
+          Top = 18
+          Width = 51
+          Height = 13
+          Caption = 'Fr'#233'quence'
+        end
+        object Label36: TLabel
+          Left = 32
+          Top = 59
+          Width = 91
+          Height = 13
+          Caption = 'Bande fr'#233'quentielle'
+        end
+        object Button_test3: TButton
+          Left = 152
+          Top = 32
+          Width = 57
+          Height = 17
+          Caption = 'Sinus'
+          Enabled = False
+          TabOrder = 0
+          OnClick = Button_test3Click
+        end
+        object Button_test4: TButton
+          Left = 152
+          Top = 75
+          Width = 57
+          Height = 17
+          Caption = 'Al'#233'atoire'
+          Enabled = False
+          TabOrder = 1
+          OnClick = Button_test4Click
+        end
+        object CBTAmp: TComboBox
+          Left = 16
+          Top = 32
+          Width = 49
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 2
+          Text = '4'
+          Items.Strings = (
+            '4'
+            '8')
+        end
+        object CBTFreq: TComboBox
+          Left = 87
+          Top = 33
+          Width = 50
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 3
+          Text = '0.25'
+          Items.Strings = (
+            '0.25'
+            '0.5'
+            '0.7'
+            '1')
+        end
+        object CBTalea: TComboBox
+          Left = 48
+          Top = 73
+          Width = 64
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 4
+          Text = '0.25 - 1'
+          Items.Strings = (
+            '0.25 - 1'
+            '0.25 - 5'
+            '0.25 - 10')
+        end
+      end
+      object GBPompage: TGroupBox
+        Left = 8
+        Top = 280
+        Width = 217
+        Height = 105
+        Caption = 'Essais Pompage'
+        Color = clInfoBk
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
         TabOrder = 4
-        OnClick = Button2Click
+        object Label37: TLabel
+          Left = 16
+          Top = 18
+          Width = 46
+          Height = 13
+          Caption = 'Amplitude'
+        end
+        object Label38: TLabel
+          Left = 80
+          Top = 18
+          Width = 51
+          Height = 13
+          Caption = 'Fr'#233'quence'
+        end
+        object Label39: TLabel
+          Left = 32
+          Top = 59
+          Width = 91
+          Height = 13
+          Caption = 'Bande fr'#233'quentielle'
+        end
+        object Button_test5: TButton
+          Left = 152
+          Top = 32
+          Width = 57
+          Height = 17
+          Caption = 'Sinus'
+          Enabled = False
+          TabOrder = 0
+          OnClick = Button_test5Click
+        end
+        object Button_test6: TButton
+          Left = 152
+          Top = 75
+          Width = 57
+          Height = 17
+          Caption = 'Al'#233'atoire'
+          Enabled = False
+          TabOrder = 1
+          OnClick = Button_test6Click
+        end
+        object CBPAmp: TComboBox
+          Left = 16
+          Top = 32
+          Width = 49
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 2
+          Text = '4'
+          Items.Strings = (
+            '4'
+            '8')
+        end
+        object CBPFreq: TComboBox
+          Left = 87
+          Top = 33
+          Width = 50
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 3
+          Text = '0.25'
+          Items.Strings = (
+            '0.25'
+            '0.5'
+            '0.7'
+            '1')
+        end
+        object CBPalea: TComboBox
+          Left = 48
+          Top = 73
+          Width = 64
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 4
+          Text = '0.25 - 1'
+          Items.Strings = (
+            '0.25 - 1'
+            '0.25 - 5'
+            '0.25 - 10')
+        end
+      end
+      object GBCombine: TGroupBox
+        Left = 8
+        Top = 392
+        Width = 217
+        Height = 161
+        Caption = 'Essais Combin'#233's'
+        Color = clInactiveCaptionText
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 5
+        object Label40: TLabel
+          Left = 16
+          Top = 18
+          Width = 46
+          Height = 13
+          Caption = 'Amplitude'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clMaroon
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label41: TLabel
+          Left = 80
+          Top = 18
+          Width = 51
+          Height = 13
+          Caption = 'Fr'#233'quence'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clMaroon
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label42: TLabel
+          Left = 16
+          Top = 66
+          Width = 46
+          Height = 13
+          Caption = 'Amplitude'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label43: TLabel
+          Left = 81
+          Top = 66
+          Width = 51
+          Height = 13
+          Caption = 'Fr'#233'quence'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label44: TLabel
+          Left = 144
+          Top = 34
+          Width = 40
+          Height = 13
+          Caption = 'ROULIS'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clMaroon
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label45: TLabel
+          Left = 144
+          Top = 82
+          Width = 52
+          Height = 13
+          Caption = 'TANGAGE'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label46: TLabel
+          Left = 57
+          Top = 106
+          Width = 55
+          Height = 13
+          Caption = 'D'#233'phasage'
+        end
+        object Button_test7: TButton
+          Left = 152
+          Top = 123
+          Width = 57
+          Height = 17
+          Caption = 'Sinus'
+          Enabled = False
+          TabOrder = 0
+          OnClick = Button_test7Click
+        end
+        object CBCRAmp: TComboBox
+          Left = 16
+          Top = 32
+          Width = 49
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 1
+          Text = '1'
+          Items.Strings = (
+            '1'
+            '2'
+            '4'
+            '6')
+        end
+        object CBCRFreq: TComboBox
+          Left = 87
+          Top = 33
+          Width = 50
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 2
+          Text = '0.25'
+          Items.Strings = (
+            '0.25'
+            '0.5'
+            '0.7'
+            '1')
+        end
+        object CBCTAmp: TComboBox
+          Left = 16
+          Top = 81
+          Width = 49
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 3
+          Text = '1'
+          Items.Strings = (
+            '1'
+            '2'
+            '4'
+            '6')
+        end
+        object CBCTFreq: TComboBox
+          Left = 86
+          Top = 81
+          Width = 51
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 4
+          Text = '0.25'
+          Items.Strings = (
+            '0.25'
+            '0.5'
+            '0.7'
+            '1')
+        end
+        object CBCphi: TComboBox
+          Left = 54
+          Top = 121
+          Width = 51
+          Height = 21
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 5
+          Text = '0'
+          Items.Strings = (
+            '0'
+            '45'
+            '90')
+        end
       end
     end
   end
@@ -2783,14 +3232,7 @@ object Form1: TForm1
     Enabled = False
     Interval = 100
     OnTimer = VICON_OFFTimer
-    Left = 1192
-    Top = 848
-  end
-  object video: TTimer
-    Enabled = False
-    Interval = 100
-    OnTimer = videoTimer
-    Left = 1248
-    Top = 848
+    Left = 1144
+    Top = 880
   end
 end
