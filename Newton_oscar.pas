@@ -306,6 +306,15 @@ type TForm1 = class(TForm)
     Label45: TLabel;
     CBCphi: TComboBox;
     Label46: TLabel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    BitBtn5: TBitBtn;
+    BitBtn6: TBitBtn;
+    BitBtn7: TBitBtn;
+    lblPompAmp: TLabel;
+    lblPompFreq: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime, newTime: Double);
@@ -412,6 +421,13 @@ type TForm1 = class(TForm)
     procedure Button_test6Click(Sender: TObject);
     procedure Button_test5Click(Sender: TObject);
     procedure Button_test7Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn5Click(Sender: TObject);
+    procedure BitBtn6Click(Sender: TObject);
+    procedure BitBtn7Click(Sender: TObject);
   private                                             { Déclarations privées }
     Jpiston                    : array[0..1] of PNewtonjoint;
     bielle ,manivelle          : array[0..2] of Pnewtonbody;
@@ -2019,7 +2035,8 @@ begin
          if Form1.ChkRampPomp.Checked then begin      //
          if anglPomp>=360 then anglPomp:=0;
           pomp:=biel+sin(anglPomp*pi/180)*Tbar10.Position/100*0.05;
-          form1.Caption:=floattostr(Pomp);
+          lblpompamp.Caption:= floattostr(0.05*Tbar10.Position/100) ;
+          lblpompfreq.Caption:= floattostr(10*Tbar11.Position/360) ;
           edtdZ.text:=floattostrf(pomp,fffixed,5,3) ; //
           end;                                          //
   end;
@@ -2979,7 +2996,6 @@ begin
    begin
     test_indicator:=0;                                // aucun essai type sélectionné
     fade:=0;
-    anglroulis:=0;
     btnVicon.Enabled:=true;
     if isOpen(File_resu)  then CloseFile(File_resu);
    end;
@@ -3161,6 +3177,86 @@ begin
       form2.Memo1.Lines.Add(FormatDateTime('tt', time));
       form2.Memo1.Lines.Add('Hall d''essai B26 - INRS');
       Timer_test.Enabled:=true;
+end;
+
+procedure TForm1.BitBtn1Click(Sender: TObject);
+var
+  amplitude, frequence :string;
+begin
+  memo1.Clear;
+  if CBRAmp.ItemIndex=1 then amplitude:='moyenne' else if CBRAmp.ItemIndex=2 then amplitude:='élevée';
+  if CBRFreq.ItemIndex=0 then frequence:='faible' else if CBRFreq.ItemIndex=1 then frequence:='moyenne' else
+  if CBRFreq.ItemIndex=2 then frequence:='élevée' else if CBRFreq.ItemIndex=3 then frequence:='très élevée';
+  memo1.Lines.Add('Essais ROULIS - Amplitude '+amplitude+' - Fréquence '+frequence);
+  if CBRAmp.ItemIndex=0 then
+  begin
+    memo1.Clear;
+    memo1.Lines.Add('Essai sans mouvement de la plateforme');
+  end;
+end;
+
+procedure TForm1.BitBtn2Click(Sender: TObject);
+var
+  amplitude, frequence :string;
+begin
+  memo1.Clear;
+  memo1.Lines.Add('Essais ROULIS - oscillation aléatoire');
+end;
+
+
+procedure TForm1.BitBtn3Click(Sender: TObject);
+var
+  amplitude, frequence :string;
+begin
+  memo1.Clear;
+  if CBTAmp.ItemIndex=0 then amplitude:='moyenne' else if CBTAmp.ItemIndex=1 then amplitude:='élevée';
+  if CBTFreq.ItemIndex=0 then frequence:='faible' else if CBTFreq.ItemIndex=1 then frequence:='moyenne' else
+  if CBTFreq.ItemIndex=2 then frequence:='élevée' else if CBTFreq.ItemIndex=3 then frequence:='très élevée';
+  memo1.Lines.Add('Essais TANGAGE - Amplitude '+amplitude+' - Fréquence '+frequence);
+end;
+
+procedure TForm1.BitBtn4Click(Sender: TObject);
+var
+  amplitude, frequence :string;
+begin
+  memo1.Clear;
+  memo1.Lines.Add('Essais TANGAGE - oscillation aléatoire');
+end;
+
+procedure TForm1.BitBtn5Click(Sender: TObject);
+var
+  amplitude, frequence :string;
+begin
+  memo1.Clear;
+  if CBPAmp.ItemIndex=0 then amplitude:='moyenne' else if CBPAmp.ItemIndex=1 then amplitude:='élevée';
+  if CBPFreq.ItemIndex=0 then frequence:='faible' else if CBPFreq.ItemIndex=1 then frequence:='moyenne' else
+  if CBPFreq.ItemIndex=2 then frequence:='élevée' else if CBPFreq.ItemIndex=3 then frequence:='très élevée';
+  memo1.Lines.Add('Essais MOUVEMENT VERTICAL - Amplitude '+amplitude+' - Fréquence '+frequence);
+end;
+
+procedure TForm1.BitBtn6Click(Sender: TObject);
+var
+  amplitude, frequence :string;
+begin
+  memo1.Clear;
+  memo1.Lines.Add('Essais MOUVEMENT VERTICAL - aléatoire');
+end;
+
+procedure TForm1.BitBtn7Click(Sender: TObject);
+var
+  amplitude1, frequence1 :string;
+  amplitude2, frequence2 :string;
+begin
+  memo1.Clear;
+  if CBCRAmp.ItemIndex=0 then amplitude1:='faible' else if CBCRAmp.ItemIndex=1 then amplitude1:='moyenne'else
+  if CBCRAmp.ItemIndex=2 then amplitude1:='élevée' else if CBCRAmp.ItemIndex=3 then amplitude1:='très élevée';
+  if CBCRFreq.ItemIndex=0 then frequence1:='faible' else if CBCRFreq.ItemIndex=1 then frequence1:='moyenne' else
+  if CBCRFreq.ItemIndex=2 then frequence1:='élevée' else if CBCRFreq.ItemIndex=3 then frequence1:='très élevée';
+  if CBCTAmp.ItemIndex=0 then amplitude2:='faible' else if CBCTAmp.ItemIndex=1 then amplitude2:='moyenne'else
+  if CBCTAmp.ItemIndex=2 then amplitude2:='élevée' else if CBCTAmp.ItemIndex=3 then amplitude2:='très élevée';
+  if CBCTFreq.ItemIndex=0 then frequence2:='faible' else if CBCTFreq.ItemIndex=1 then frequence2:='moyenne' else
+  if CBCTFreq.ItemIndex=2 then frequence2:='élevée' else if CBCTFreq.ItemIndex=3 then frequence2:='très élevée';
+  memo1.Lines.Add('COMBINE - Roulis : Ampl '+amplitude1+' - Fréq '+frequence1+' - Tangage : Ampl '+amplitude2+' - Fréq '+frequence2 );
 end;
 
 end.
