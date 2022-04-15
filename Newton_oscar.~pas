@@ -313,6 +313,8 @@ type TForm1 = class(TForm)
     BitBtn5: TBitBtn;
     BitBtn6: TBitBtn;
     BitBtn7: TBitBtn;
+    lblPompAmp: TLabel;
+    lblPompFreq: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime, newTime: Double);
@@ -456,7 +458,7 @@ type
     TObjectSend = packed record
     orientation: TVector3f; //roulis,tangage,dz
     vitesse: single;
-    comm:string[100];
+    comm:string[200];
     warn:boolean;
 end;
 
@@ -1905,7 +1907,7 @@ var
   m1,m2,m3:array[0..9] of single;
   plateforme_pos:Tvector3f;
 begin
-                          
+
   if test_indicator<>0 then
   //Liste de Tests préprogrammés
   begin
@@ -2033,7 +2035,8 @@ begin
          if Form1.ChkRampPomp.Checked then begin      //
          if anglPomp>=360 then anglPomp:=0;
           pomp:=biel+sin(anglPomp*pi/180)*Tbar10.Position/100*0.05;
-          form1.Caption:=floattostr(Pomp);
+          lblpompamp.Caption:= floattostr(0.05*Tbar10.Position/100) ;
+          lblpompfreq.Caption:= floattostr(10*Tbar11.Position/360) ;
           edtdZ.text:=floattostrf(pomp,fffixed,5,3) ; //
           end;                                          //
   end;
@@ -2058,8 +2061,9 @@ begin
   packet.orientation[2]:=coef_dz*(-biel+strtofloat(edtdZ.text));  //pompage
   packet.warn:=checkbox1.Checked;
   msg:='';
-  for i:=0 to memo1.lines.Count do msg:=msg+memo1.Lines[i];
-  if counter_msg<(delai_msg*10) then  packet.comm:=msg else packet.comm:='';
+  for i:=0 to memo1.lines.Count-1 do msg:=msg+memo1.Lines[i]+'&';
+  msg:=stringreplace(msg,' ','$',[rfReplaceAll, rfIgnoreCase]);
+  if counter_msg<(delai_msg*10) then   packet.comm:=msg else packet.comm:='';
   idUDPClient1.sendbuffer(rawtobytes(packet,SizeOf(packet)));
 
 end;
@@ -3181,14 +3185,16 @@ var
   amplitude, frequence :string;
 begin
   memo1.Clear;
-  if CBRAmp.ItemIndex=1 then amplitude:='moyenne' else if CBRAmp.ItemIndex=2 then amplitude:='élevée';
+  if CBRAmp.ItemIndex=1 then amplitude:='moyenne' else if CBRAmp.ItemIndex=2 then amplitude:='elevee';
   if CBRFreq.ItemIndex=0 then frequence:='faible' else if CBRFreq.ItemIndex=1 then frequence:='moyenne' else
-  if CBRFreq.ItemIndex=2 then frequence:='élevée' else if CBRFreq.ItemIndex=3 then frequence:='très élevée';
-  memo1.Lines.Add('Essais ROULIS - Amplitude '+amplitude+' - Fréquence '+frequence);
+  if CBRFreq.ItemIndex=2 then frequence:='elevee' else if CBRFreq.ItemIndex=3 then frequence:='tres elevee';
+  memo1.Lines.Add('~ Essai de ROULIS ~');
+  memo1.Lines.Add('Amplitude '+amplitude);
+  memo1.Lines.Add('Frequence '+frequence);
   if CBRAmp.ItemIndex=0 then
   begin
     memo1.Clear;
-    memo1.Lines.Add('Essai sans mouvement de la plateforme');
+    memo1.Lines.Add('~ Essai sans mouvement de la plateforme ~');
   end;
 end;
 
@@ -3197,7 +3203,8 @@ var
   amplitude, frequence :string;
 begin
   memo1.Clear;
-  memo1.Lines.Add('Essais ROULIS - oscillation aléatoire');
+  memo1.Lines.Add('~ Essai de ROULIS ~');
+  memo1.Lines.Add('Oscillation aléatoire');
 end;
 
 
@@ -3206,10 +3213,12 @@ var
   amplitude, frequence :string;
 begin
   memo1.Clear;
-  if CBTAmp.ItemIndex=0 then amplitude:='moyenne' else if CBTAmp.ItemIndex=1 then amplitude:='élevée';
+  if CBTAmp.ItemIndex=0 then amplitude:='moyenne' else if CBTAmp.ItemIndex=1 then amplitude:='elevee';
   if CBTFreq.ItemIndex=0 then frequence:='faible' else if CBTFreq.ItemIndex=1 then frequence:='moyenne' else
-  if CBTFreq.ItemIndex=2 then frequence:='élevée' else if CBTFreq.ItemIndex=3 then frequence:='très élevée';
-  memo1.Lines.Add('Essais TANGAGE - Amplitude '+amplitude+' - Fréquence '+frequence);
+  if CBTFreq.ItemIndex=2 then frequence:='elevee' else if CBTFreq.ItemIndex=3 then frequence:='tres elevee';
+  memo1.Lines.Add('~ Essai de TANGAGE ~');
+  memo1.Lines.Add('Amplitude '+amplitude);
+  memo1.Lines.Add('Frequence '+frequence);
 end;
 
 procedure TForm1.BitBtn4Click(Sender: TObject);
@@ -3217,7 +3226,8 @@ var
   amplitude, frequence :string;
 begin
   memo1.Clear;
-  memo1.Lines.Add('Essais TANGAGE - oscillation aléatoire');
+  memo1.Lines.Add('~ Essai de TANGAGE ~');
+  memo1.Lines.Add('Oscillation aleatoire');
 end;
 
 procedure TForm1.BitBtn5Click(Sender: TObject);
@@ -3225,10 +3235,12 @@ var
   amplitude, frequence :string;
 begin
   memo1.Clear;
-  if CBPAmp.ItemIndex=0 then amplitude:='moyenne' else if CBPAmp.ItemIndex=1 then amplitude:='élevée';
+  if CBPAmp.ItemIndex=0 then amplitude:='moyenne' else if CBPAmp.ItemIndex=1 then amplitude:='elevee';
   if CBPFreq.ItemIndex=0 then frequence:='faible' else if CBPFreq.ItemIndex=1 then frequence:='moyenne' else
-  if CBPFreq.ItemIndex=2 then frequence:='élevée' else if CBPFreq.ItemIndex=3 then frequence:='très élevée';
-  memo1.Lines.Add('Essais MOUVEMENT VERTICAL - Amplitude '+amplitude+' - Fréquence '+frequence);
+  if CBPFreq.ItemIndex=2 then frequence:='elevee' else if CBPFreq.ItemIndex=3 then frequence:='tres elevee';
+  memo1.Lines.Add('~ Essai de MOUVEMENT VERTICAL ~');
+  memo1.Lines.Add('Amplitude '+amplitude);
+  memo1.Lines.Add('Frequence '+frequence);
 end;
 
 procedure TForm1.BitBtn6Click(Sender: TObject);
@@ -3236,7 +3248,8 @@ var
   amplitude, frequence :string;
 begin
   memo1.Clear;
-  memo1.Lines.Add('Essais MOUVEMENT VERTICAL - aléatoire');
+  memo1.Lines.Add('~ Essai de MOUVEMENT VERTICAL ~');
+  memo1.Lines.Add('Oscillation aleatoire');
 end;
 
 procedure TForm1.BitBtn7Click(Sender: TObject);
@@ -3246,14 +3259,20 @@ var
 begin
   memo1.Clear;
   if CBCRAmp.ItemIndex=0 then amplitude1:='faible' else if CBCRAmp.ItemIndex=1 then amplitude1:='moyenne'else
-  if CBCRAmp.ItemIndex=2 then amplitude1:='élevée' else if CBCRAmp.ItemIndex=3 then amplitude1:='très élevée';
+  if CBCRAmp.ItemIndex=2 then amplitude1:='elevee' else if CBCRAmp.ItemIndex=3 then amplitude1:='tres elevee';
   if CBCRFreq.ItemIndex=0 then frequence1:='faible' else if CBCRFreq.ItemIndex=1 then frequence1:='moyenne' else
-  if CBCRFreq.ItemIndex=2 then frequence1:='élevée' else if CBCRFreq.ItemIndex=3 then frequence1:='très élevée';
+  if CBCRFreq.ItemIndex=2 then frequence1:='elevee' else if CBCRFreq.ItemIndex=3 then frequence1:='tres elevee';
   if CBCTAmp.ItemIndex=0 then amplitude2:='faible' else if CBCTAmp.ItemIndex=1 then amplitude2:='moyenne'else
-  if CBCTAmp.ItemIndex=2 then amplitude2:='élevée' else if CBCTAmp.ItemIndex=3 then amplitude2:='très élevée';
+  if CBCTAmp.ItemIndex=2 then amplitude2:='elevee' else if CBCTAmp.ItemIndex=3 then amplitude2:='tres elevee';
   if CBCTFreq.ItemIndex=0 then frequence2:='faible' else if CBCTFreq.ItemIndex=1 then frequence2:='moyenne' else
-  if CBCTFreq.ItemIndex=2 then frequence2:='élevée' else if CBCTFreq.ItemIndex=3 then frequence2:='très élevée';
-  memo1.Lines.Add('COMBINE - Roulis : Ampl '+amplitude1+' - Fréq '+frequence1+' - Tangage : Ampl '+amplitude2+' - Fréq '+frequence2 );
+  if CBCTFreq.ItemIndex=2 then frequence2:='elevee' else if CBCTFreq.ItemIndex=3 then frequence2:='tres elevee';
+  memo1.Lines.Add('~ Essai COMBINE : Roulis et Tangage ~');
+  memo1.Lines.Add('-Roulis-');
+  memo1.Lines.Add('Amplitude '+amplitude1);
+  memo1.Lines.Add('Frequence '+frequence1);
+  memo1.Lines.Add('-Tangage-');
+  memo1.Lines.Add('Amplitude '+amplitude2);
+  memo1.Lines.Add('Frequence '+frequence2 );
 end;
 
 end.

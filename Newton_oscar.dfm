@@ -2290,7 +2290,7 @@ object Form1: TForm1
         Top = 24
         Width = 201
         Height = 81
-        MaxLength = 100
+        MaxLength = 200
         TabOrder = 0
       end
       object SendBtn: TButton
@@ -3404,7 +3404,7 @@ object Form1: TForm1
   end
   object IdUDPServer1: TIdUDPServer
     Active = True
-    BufferSize = 128
+    BufferSize = 250
     Bindings = <>
     DefaultPort = 8090
     OnUDPRead = UDPServerUDPRead

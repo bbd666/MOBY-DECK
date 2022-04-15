@@ -747,6 +747,32 @@ object Form1: TForm1
           Font.Style = []
           ParentFont = False
         end
+        object lblPompAmp: TLabel
+          Left = 224
+          Top = 12
+          Width = 5
+          Height = 13
+          Caption = '0'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clFuchsia
+          Font.Height = -11
+          Font.Name = 'MS Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object lblPompFreq: TLabel
+          Left = 224
+          Top = 28
+          Width = 5
+          Height = 13
+          Caption = '0'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clFuchsia
+          Font.Height = -11
+          Font.Name = 'MS Serif'
+          Font.Style = []
+          ParentFont = False
+        end
         object ChkRampPomp: TCheckBox
           Left = 64
           Top = 72
@@ -785,7 +811,7 @@ object Form1: TForm1
         object TBar11: TTrackBar
           Left = 120
           Top = 28
-          Width = 113
+          Width = 105
           Height = 13
           Max = 100
           Orientation = trHorizontal
@@ -801,7 +827,7 @@ object Form1: TForm1
         object TBar10: TTrackBar
           Left = 120
           Top = 12
-          Width = 113
+          Width = 105
           Height = 13
           Max = 100
           Orientation = trHorizontal
@@ -912,7 +938,7 @@ object Form1: TForm1
         end
         object lblroulamp: TLabel
           Left = 224
-          Top = 15
+          Top = 12
           Width = 5
           Height = 13
           Caption = '0'
@@ -925,7 +951,7 @@ object Form1: TForm1
         end
         object lblroulfreq: TLabel
           Left = 224
-          Top = 28
+          Top = 27
           Width = 5
           Height = 13
           Caption = '0'
@@ -2264,7 +2290,7 @@ object Form1: TForm1
         Top = 24
         Width = 201
         Height = 81
-        MaxLength = 100
+        MaxLength = 200
         TabOrder = 0
       end
       object SendBtn: TButton
@@ -3378,7 +3404,7 @@ object Form1: TForm1
   end
   object IdUDPServer1: TIdUDPServer
     Active = True
-    BufferSize = 128
+    BufferSize = 250
     Bindings = <>
     DefaultPort = 8090
     OnUDPRead = UDPServerUDPRead
