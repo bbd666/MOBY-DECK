@@ -3168,10 +3168,8 @@ begin
       anglroulis:=0;
       angltangage:=0;
       form2.Memo1.Lines.Add('Essai combinés sinus');
-      form2.Memo1.Lines.Add('Amplitude roulis : '+CBCRAmp.items[CBCRAmp.itemindex]);
-      form2.Memo1.Lines.Add('Fréquence roulis : '+CBCRFreq.items[CBCRFreq.itemindex]);
-      form2.Memo1.Lines.Add('Amplitude tangage : '+CBCTAmp.items[CBCTAmp.itemindex]);
-      form2.Memo1.Lines.Add('Fréquence tangage : '+CBCTFreq.items[CBCTFreq.itemindex]);
+      form2.Memo1.Lines.Add('Roulis Amp : '+CBCRAmp.items[CBCRAmp.itemindex]+' Fréq : '+CBCRFreq.items[CBCRFreq.itemindex]);
+      form2.Memo1.Lines.Add('Tangage Amp : '+CBCTAmp.items[CBCTAmp.itemindex]'Fréq : '+CBCTFreq.items[CBCTFreq.itemindex]);
       form2.Memo1.Lines.Add('Déphasage : '+CBCphi.items[CBCphi.itemindex]);
       for i:=1 to memo2.Lines.Count do   form2.Memo1.Lines.Add(memo2.Lines[i-1]);
       form2.Memo1.Lines.Add(FormatDateTime('ddddd', Date));
@@ -3268,11 +3266,9 @@ begin
   if CBCTFreq.ItemIndex=2 then frequence2:='elevee' else if CBCTFreq.ItemIndex=3 then frequence2:='tres elevee';
   memo1.Lines.Add('~ Essai COMBINE : Roulis et Tangage ~');
   memo1.Lines.Add('-Roulis-');
-  memo1.Lines.Add('Amplitude '+amplitude1);
-  memo1.Lines.Add('Frequence '+frequence1);
+  memo1.Lines.Add('Amp '+amplitude1+' Freq '+frequence1);
   memo1.Lines.Add('-Tangage-');
-  memo1.Lines.Add('Amplitude '+amplitude2);
-  memo1.Lines.Add('Frequence '+frequence2 );
+  memo1.Lines.Add('Amp '+amplitude2+' Freq '+frequence2 );
 end;
 
 end.
