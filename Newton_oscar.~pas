@@ -2891,7 +2891,7 @@ end;
 
 procedure TForm1.TrackBarTangageChange(Sender: TObject);
 begin
-  Coef_the:=-TrackBarTangage.Position/10.;
+  Coef_the:=TrackBarTangage.Position/10.;
   lblTangage.Caption:=floattostrf(Coef_the,ffgeneral,3,1);
 end;
 
@@ -3017,14 +3017,18 @@ end;
 procedure TForm1.BtnViconClick(Sender: TObject);
 var
   i,buttonSelected : integer;
+  valeurpardefaut:string;
 begin
     i:=find_next_testNumber;
-    buttonSelected := messagedlg('Trial_'+inttostr(i)+'.txt ?',mtError, mbOKCancel, 0);
-    if buttonSelected = mrOK then
+    //buttonSelected := messagedlg('Trial_'+inttostr(i)+'.txt ?',mtError, mbOKCancel, 0);
+    valeurpardefaut:='Trial_'+inttostr(i)+'.txt';
+    if InputQuery('Confirmation','Entrez le nom du test SVP !',valeurpardefaut)   then
+    //if buttonSelected = mrOK then
     begin
       form2.Memo1.Clear;
-      form2.Memo1.Lines.Add('Trial_'+inttostr(i));
-      AssignFile(File_resu,'resultats/Trial_'+inttostr(i)+'.txt');
+      //form2.Memo1.Lines.Add('Trial_'+inttostr(i));
+      form2.Memo1.Lines.Add(valeurpardefaut);
+      AssignFile(File_resu,'resultats/'+valeurpardefaut);
       ReWrite(File_resu);
       _8136_D_Output(CARD0,Dlink_6,MARCHE); //VICON   ON
       vicon_on.Enabled:=true;
@@ -3169,7 +3173,7 @@ begin
       angltangage:=0;
       form2.Memo1.Lines.Add('Essai combinés sinus');
       form2.Memo1.Lines.Add('Roulis Amp : '+CBCRAmp.items[CBCRAmp.itemindex]+' Fréq : '+CBCRFreq.items[CBCRFreq.itemindex]);
-      form2.Memo1.Lines.Add('Tangage Amp : '+CBCTAmp.items[CBCTAmp.itemindex]'Fréq : '+CBCTFreq.items[CBCTFreq.itemindex]);
+      form2.Memo1.Lines.Add('Tangage Amp : '+CBCTAmp.items[CBCTAmp.itemindex]+'Fréq : '+CBCTFreq.items[CBCTFreq.itemindex]);
       form2.Memo1.Lines.Add('Déphasage : '+CBCphi.items[CBCphi.itemindex]);
       for i:=1 to memo2.Lines.Count do   form2.Memo1.Lines.Add(memo2.Lines[i-1]);
       form2.Memo1.Lines.Add(FormatDateTime('ddddd', Date));

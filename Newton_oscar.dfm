@@ -3051,7 +3051,7 @@ object Form1: TForm1
     Height = 18
     Panels = <
       item
-        Text = 'Pierre LEMERLE 18/03/2022'
+        Text = 'Pierre LEMERLE 23/05/2022'
         Width = 150
       end
       item

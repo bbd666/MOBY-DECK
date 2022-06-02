@@ -608,11 +608,15 @@ begin
  end;
 end;
 
+function TryDecimalStrToInt( const S: string; out Value: Integer): Boolean;
+begin
+  result := (pos('$',S)=0) and ((pos('x',S)=0)) and TryStrToInt(S,Value);
+end;
 
 function find_next_testNumber:integer;
 var
   searchResult : TSearchREC;
-  index:integer;
+  index,i:integer;
   sub:string;
 begin
   index:=0;
@@ -623,7 +627,8 @@ begin
       sub:=extractfilename(searchResult.Name);
       sub:=ChangeFileExt(sub,'');
       sub:=copy(sub,7,6);
-      if strtoint(sub)>index then  index:=strtoint(sub);
+      if TryDecimalStrToInt(sub,i)  then
+      if i>index then  index:=i;
     until FindNext(searchResult) <> 0;
 
     // Must free up resources used by these successful finds
@@ -2375,9 +2380,9 @@ begin
   delai_msg:=DATA_INI.READINTEGER('NETWORK','delai_msg',5);
   max_tick_test:=round(DATA_INI.READFLOAT('TEST','duration',5)*1000/Timer_test.interval);
   fade_time:=DATA_INI.READFLOAT('TEST','fade_time',1);
-  trackbarTangage.Position:=-round(coef_the*10);
+  trackbarTangage.Position:=round(coef_the*10);
   trackbarRoulis.Position:=-round(coef_phi*10);
-  trackbarPompage.Position:=round(coef_dz*10);
+  trackbarPompage.Position:=-round(coef_dz*10);
   trackbarVitesse.Position:=round(coef_vit*10);
 
   //form1.caption:=floattostr( coef_phi)+'  '+  floattostr( coef_the)+'  '+floattostr( coef_dz);
@@ -2885,13 +2890,13 @@ begin  if  Tangage_triangle_state then  Tangagetriangle.Checked:=false;end;
 
 procedure TForm1.TrackBarPompageChange(Sender: TObject);
 begin
-  Coef_dz:=TrackBarPompage.Position/10.;
+  Coef_dz:=-TrackBarPompage.Position/10.;
   lblPompage.Caption:=floattostrf(Coef_dz,ffgeneral,3,1);
 end;
 
 procedure TForm1.TrackBarTangageChange(Sender: TObject);
 begin
-  Coef_the:=-TrackBarTangage.Position/10.;
+  Coef_the:=TrackBarTangage.Position/10.;
   lblTangage.Caption:=floattostrf(Coef_the,ffgeneral,3,1);
 end;
 
@@ -3017,14 +3022,18 @@ end;
 procedure TForm1.BtnViconClick(Sender: TObject);
 var
   i,buttonSelected : integer;
+  valeurpardefaut:string;
 begin
     i:=find_next_testNumber;
-    buttonSelected := messagedlg('Trial_'+inttostr(i)+'.txt ?',mtError, mbOKCancel, 0);
-    if buttonSelected = mrOK then
+    //buttonSelected := messagedlg('Trial_'+inttostr(i)+'.txt ?',mtError, mbOKCancel, 0);
+    valeurpardefaut:='Trial_'+inttostr(i)+'.txt';
+    if InputQuery('Confirmation','Entrez le nom du test SVP !',valeurpardefaut)   then
+    //if buttonSelected = mrOK then
     begin
       form2.Memo1.Clear;
-      form2.Memo1.Lines.Add('Trial_'+inttostr(i));
-      AssignFile(File_resu,'resultats/Trial_'+inttostr(i)+'.txt');
+      //form2.Memo1.Lines.Add('Trial_'+inttostr(i));
+      form2.Memo1.Lines.Add(valeurpardefaut);
+      AssignFile(File_resu,'resultats/'+valeurpardefaut);
       ReWrite(File_resu);
       _8136_D_Output(CARD0,Dlink_6,MARCHE); //VICON   ON
       vicon_on.Enabled:=true;
@@ -3074,7 +3083,7 @@ begin
       test_indicator:=2;
       tick_test:=0;
       anglroulis:=0;
-      form2.Memo1.Lines.Add('Essai aléatoire en roulis');
+      form2.Memo1.Lines.Add('Essai aletoire en roulis');
       form2.Memo1.Lines.Add(CBRalea.items[CBRalea.itemindex]);
       for i:=1 to memo2.Lines.Count do   form2.Memo1.Lines.Add(memo2.Lines[i-1]);
       form2.Memo1.Lines.Add(FormatDateTime('ddddd', Date));
@@ -3111,7 +3120,7 @@ begin
       test_indicator:=4;
       tick_test:=0;
       angltangage:=0;
-      form2.Memo1.Lines.Add('Essai aléatoire en tangage');
+      form2.Memo1.Lines.Add('Essai aleatoire en tangage');
       form2.Memo1.Lines.Add(CBTalea.items[CBTalea.itemindex]);
       for i:=1 to memo2.Lines.Count do   form2.Memo1.Lines.Add(memo2.Lines[i-1]);
       form2.Memo1.Lines.Add(FormatDateTime('ddddd', Date));
@@ -3148,7 +3157,7 @@ begin
       test_indicator:=6;
       tick_test:=0;
       anglpomp:=0;
-      form2.Memo1.Lines.Add('Essai aléatoire en pompage');
+      form2.Memo1.Lines.Add('Essai aleatoire en pompage');
       form2.Memo1.Lines.Add(CBPalea.items[CBPalea.itemindex]);
       for i:=1 to memo2.Lines.Count do   form2.Memo1.Lines.Add(memo2.Lines[i-1]);
       form2.Memo1.Lines.Add(FormatDateTime('ddddd', Date));
@@ -3202,7 +3211,7 @@ var
 begin
   memo1.Clear;
   memo1.Lines.Add('~ Essai de ROULIS ~');
-  memo1.Lines.Add('Oscillation aléatoire');
+  memo1.Lines.Add('Oscillation aleatoire');
 end;
 
 
