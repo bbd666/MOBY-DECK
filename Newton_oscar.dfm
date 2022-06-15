@@ -18,6 +18,10 @@ object Form1: TForm1
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnMouseWheel = FMW
+  OnResize = FormResize
+  DesignSize = (
+    1838
+    1125)
   PixelsPerInch = 96
   TextHeight = 13
   object GLSceneviewer1: TGLSceneViewer
@@ -36,6 +40,7 @@ object Form1: TForm1
     Top = 0
     Width = 492
     Height = 1105
+    Anchors = [akTop, akRight]
     Color = clSilver
     TabOrder = 1
     object lblFile: TLabel

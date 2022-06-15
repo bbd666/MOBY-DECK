@@ -2375,9 +2375,9 @@ begin
   delai_msg:=DATA_INI.READINTEGER('NETWORK','delai_msg',5);
   max_tick_test:=round(DATA_INI.READFLOAT('TEST','duration',5)*1000/Timer_test.interval);
   fade_time:=DATA_INI.READFLOAT('TEST','fade_time',1);
-  trackbarTangage.Position:=-round(coef_the*10);
+  trackbarTangage.Position:=round(coef_the*10);
   trackbarRoulis.Position:=-round(coef_phi*10);
-  trackbarPompage.Position:=round(coef_dz*10);
+  trackbarPompage.Position:=-round(coef_dz*10);
   trackbarVitesse.Position:=round(coef_vit*10);
 
   //form1.caption:=floattostr( coef_phi)+'  '+  floattostr( coef_the)+'  '+floattostr( coef_dz);
@@ -2885,7 +2885,7 @@ begin  if  Tangage_triangle_state then  Tangagetriangle.Checked:=false;end;
 
 procedure TForm1.TrackBarPompageChange(Sender: TObject);
 begin
-  Coef_dz:=TrackBarPompage.Position/10.;
+  Coef_dz:=-TrackBarPompage.Position/10.;
   lblPompage.Caption:=floattostrf(Coef_dz,ffgeneral,3,1);
 end;
 
@@ -3078,7 +3078,7 @@ begin
       test_indicator:=2;
       tick_test:=0;
       anglroulis:=0;
-      form2.Memo1.Lines.Add('Essai aléatoire en roulis');
+      form2.Memo1.Lines.Add('Essai aletoire en roulis');
       form2.Memo1.Lines.Add(CBRalea.items[CBRalea.itemindex]);
       for i:=1 to memo2.Lines.Count do   form2.Memo1.Lines.Add(memo2.Lines[i-1]);
       form2.Memo1.Lines.Add(FormatDateTime('ddddd', Date));
@@ -3115,7 +3115,7 @@ begin
       test_indicator:=4;
       tick_test:=0;
       angltangage:=0;
-      form2.Memo1.Lines.Add('Essai aléatoire en tangage');
+      form2.Memo1.Lines.Add('Essai aleatoire en tangage');
       form2.Memo1.Lines.Add(CBTalea.items[CBTalea.itemindex]);
       for i:=1 to memo2.Lines.Count do   form2.Memo1.Lines.Add(memo2.Lines[i-1]);
       form2.Memo1.Lines.Add(FormatDateTime('ddddd', Date));
@@ -3152,7 +3152,7 @@ begin
       test_indicator:=6;
       tick_test:=0;
       anglpomp:=0;
-      form2.Memo1.Lines.Add('Essai aléatoire en pompage');
+      form2.Memo1.Lines.Add('Essai aleatoire en pompage');
       form2.Memo1.Lines.Add(CBPalea.items[CBPalea.itemindex]);
       for i:=1 to memo2.Lines.Count do   form2.Memo1.Lines.Add(memo2.Lines[i-1]);
       form2.Memo1.Lines.Add(FormatDateTime('ddddd', Date));
@@ -3206,7 +3206,7 @@ var
 begin
   memo1.Clear;
   memo1.Lines.Add('~ Essai de ROULIS ~');
-  memo1.Lines.Add('Oscillation aléatoire');
+  memo1.Lines.Add('Oscillation aleatoire');
 end;
 
 
