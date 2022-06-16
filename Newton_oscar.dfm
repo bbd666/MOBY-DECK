@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 83
-  Top = 15
+  Left = 54
+  Top = 1
   Width = 1846
   Height = 1159
   Anchors = []
@@ -36,7 +36,7 @@ object Form1: TForm1
     OnMouseMove = GLSceneviewer1MouseMove
   end
   object Panel1: TPanel
-    Left = 1344
+    Left = 1361
     Top = 0
     Width = 492
     Height = 1105
@@ -3114,6 +3114,16 @@ object Form1: TForm1
     OnTimer = RSTimerEntreeLogiqueTimer
     ControlData = {010002004F0300004F03000040000000000300000001}
   end
+  object view3d: TCheckBox
+    Left = 1240
+    Top = 24
+    Width = 97
+    Height = 17
+    Caption = 'View 3D'
+    Checked = True
+    State = cbChecked
+    TabOrder = 9
+  end
   object GLScene1: TGLScene
     Left = 8
     Top = 176
@@ -3461,5 +3471,10 @@ object Form1: TForm1
     OnTimer = VICON_OFFTimer
     Left = 1144
     Top = 880
+  end
+  object visu3D: TTimer
+    OnTimer = visu3DTimer
+    Left = 16
+    Top = 392
   end
 end

@@ -315,6 +315,8 @@ type TForm1 = class(TForm)
     BitBtn7: TBitBtn;
     lblPompAmp: TLabel;
     lblPompFreq: TLabel;
+    view3d: TCheckBox;
+    visu3D: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime, newTime: Double);
@@ -429,6 +431,7 @@ type TForm1 = class(TForm)
     procedure BitBtn6Click(Sender: TObject);
     procedure BitBtn7Click(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure visu3DTimer(Sender: TObject);
   private                                             { Déclarations privées }
     Jpiston                    : array[0..1] of PNewtonjoint;
     bielle ,manivelle          : array[0..2] of Pnewtonbody;
@@ -2420,7 +2423,7 @@ begin
   Bmoteur[0].position.setpoint( L1+0.03,  0,0.17);
   Bmoteur[1].position.setpoint(-L2+0.03, L3,0.17);
   Bmoteur[2].position.setpoint(-L2+0.03,-L3,0.17);
-
+                                       
   for i:=DR to GA do begin
     Mbielle[i]:=TGlMateriallibrary.Create(self);
     Bbielle[i]:=TGLFreeform(GLDummyCube1.AddNewChild(TGLFreeform));
@@ -3284,6 +3287,26 @@ end;
 procedure TForm1.FormResize(Sender: TObject);
 begin
   glsceneviewer1.Width:=form1.Width-panel1.Width-9;
+end;
+
+procedure TForm1.visu3DTimer(Sender: TObject);
+var i:integer;
+begin
+  for i:=DR to GA do
+  begin
+   Bmoteur[i].Visible:=view3D.Checked;
+   Bbielle[i].Visible:=view3D.Checked;
+   Bmanivelle[i].Visible:=view3D.Checked;
+  end;
+   Bpiston.Visible:=view3D.Checked;
+   Bressort.Visible:=view3D.Checked;
+   Baxe_cardan.Visible:=view3D.Checked;
+   Bplateforme.Visible:=view3D.Checked;
+   bfix1.Visible:=view3D.Checked;
+   bfix2.Visible:=view3D.Checked;
+   bfix3.Visible:=view3D.Checked;
+   bbase.Visible:=view3D.Checked;
+   glplane1.Visible:=view3D.Checked;
 end;
 
 end.
